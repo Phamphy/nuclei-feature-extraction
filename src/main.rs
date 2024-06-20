@@ -19,7 +19,7 @@ use crate::utils::Batch;
 
 fn load_input_image() -> InputImage {
     match ARGS.slide.extension().and_then(|ext| ext.to_str()) {
-        Some("svs") => InputImage::Slide(Arc::new(Mutex::new(
+        Some("svs") | Some("mrxs") => InputImage::Slide(Arc::new(Mutex::new(
             openslide_rs::OpenSlide::new(&ARGS.slide).unwrap(),
         ))),
         Some("png") | Some("jpg") | Some("jpeg") => InputImage::Image(Arc::new(Mutex::new(
@@ -27,7 +27,7 @@ fn load_input_image() -> InputImage {
         ))),
         _ => {
             error!(
-                "Unsupported input format. Please use one of the following : svs, png, jpg, jpeg"
+                "Unsupported input format. Please use one of the following : svs, png, jpg, jpeg, mrxs"
             );
             exit(1);
         }
