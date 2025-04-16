@@ -12,6 +12,7 @@ pub enum FeatureSet {
     Glrlm,
     Gabor,
     Texture,
+    GeometryColor,
     All,
 }
 
@@ -25,6 +26,7 @@ impl std::str::FromStr for FeatureSet {
             "glrlm" => Ok(FeatureSet::Glrlm),
             "gabor" => Ok(FeatureSet::Gabor),
             "texture" => Ok(FeatureSet::Texture),
+            "geometrycolor" => Ok(FeatureSet::GeometryColor),
             "all" => Ok(FeatureSet::All),
             _ => Err(format!("{} is not a valid feature set", s)),
         }
@@ -43,6 +45,7 @@ impl FeatureSet {
                     FeatureSet::Gabor,
                 ],
                 FeatureSet::Texture => vec![FeatureSet::Glcm, FeatureSet::Glrlm, FeatureSet::Gabor],
+                FeatureSet::GeometryColor => vec![FeatureSet::Geometry, FeatureSet::Color],
                 fs => vec![fs.clone()],
             })
             .collect()
@@ -67,7 +70,7 @@ impl FeatureSet {
                 FeatureSet::Gabor => {
                     Box::new(features::GaborFilterFeatureSet) as Box<dyn features::FeatureSet>
                 }
-                FeatureSet::All | FeatureSet::Texture => unreachable!(),
+                FeatureSet::All | FeatureSet::Texture | FeatureSet::GeometryColor => unreachable!(),
             })
             .collect()
     }
